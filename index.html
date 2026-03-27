@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Academic Portfolio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        :root {
+            --bg: #ffffff;
+            --card-bg: #f8f8f8;
+            --text: #0a0a0a;
+            --text-muted: #666666;
+            --accent: #38bdf8;
+            --border: #e5e5e5;
+            --panel-hover: #f1f1f1;
+        }
+        [data-theme="dark"] {
+            --bg: #0a0a0a;
+            --card-bg: #141414;
+            --text: #ffffff;
+            --text-muted: #a1a1aa;
+            --accent: #38bdf8;
+            --border: #27272a;
+            --panel-hover: #1f1f23;
+        }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            transition: background-color 0.4s ease, color 0.4s ease;
+            scroll-behavior: smooth;
+        }
+        .mono { font-family: 'Fira Code', monospace; }
+        
+        /* Hero Image Styling */
+        .hero-image-container {
+            width: 100%;
+            max-width: 800px;
+            aspect-ratio: 16/9;
+            border-radius: 40px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-bottom: 3rem;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.05);
+        }
+        .hero-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: var(--text);
+            margin-left: 4px;
+            animation: blink 1s step-end infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink {
+            from, to { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .nav-dock-container {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            pointer-events: none;
+        }
+        .nav-dock {
+            pointer-events: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 8px 12px;
+            border-radius: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        [data-theme="dark"] .nav-dock {
+            background: rgba(20, 20, 20, 0.8);
+        }
+        .panel-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            color: var(--text-muted);
+            background: transparent;
+            cursor: pointer;
+        }
+        .panel-icon:hover {
+            background: var(--panel-hover);
+            color: var(--text);
+            transform: translateY(-6px) scale(1.1);
+        }
+
+        .course-card {
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .course-card:hover {
+            border-color: var(--text);
+            transform: translateY(-4px);
+        }
+
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 4px;
+        }
+
+        .helpful-counter {
+            font-variant-numeric: tabular-nums;
+            background: var(--text);
+            color: var(--bg);
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-weight: 800;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body class="p-6 md:p-12 lg:p-24 pb-48">
+
+    <!-- Navigation Dock -->
+    <div class="nav-dock-container">
+        <nav class="nav-dock">
+            <a href="#" class="panel-icon" title="Home"><i data-lucide="home"></i></a>
+            <div class="divider"></div>
+            <div class="flex items-center px-3 gap-2">
+                <i data-lucide="thumbs-up" class="w-4 h-4 text-sky-500"></i>
+                <span id="helpfulCount" class="helpful-counter mono">0</span>
+            </div>
+            <div class="divider"></div>
+            <button onclick="toggleTheme()" class="panel-icon" title="Toggle Theme">
+                <i id="theme-icon" data-lucide="moon"></i>
+            </button>
+        </nav>
+    </div>
+
+    <!-- Header -->
+    <header class="max-w-4xl mb-32 reveal">
+        <div class="hero-image-container">
+            <img src="like.png" alt="Featured Image">
+        </div>
+        
+        <h1 class="text-4xl md:text-7xl font-extrabold tracking-tighter mb-4 min-h-[1.1em]">
+            <span id="typewriter-text"></span><span class="cursor"></span>
+        </h1>
+    </header>
+
+    <main class="max-w-6xl mx-auto">
+        
+        <div class="flex items-center gap-4 mb-12 reveal">
+            <h2 class="text-sm font-bold uppercase tracking-widest mono text-[var(--text-muted)]">Verified Course Logs</h2>
+            <div class="flex-1 h-[1px] bg-[var(--border)]"></div>
+        </div>
+
+        <!-- Dynamic Content Grid -->
+        <div id="reviewsGrid" class="grid gap-6 md:grid-cols-2 lg:grid-cols-2">
+            <!-- Cards generated by JS -->
+        </div>
+
+    </main>
+
+    <footer class="mt-48 pb-12 border-t border-[var(--border)] pt-12 flex flex-col md:flex-row justify-between items-center gap-6 reveal">
+        <p class="text-sm text-[var(--text-muted)] font-medium">© 2026 Archive Hub</p>
+        <div class="flex items-center gap-8">
+            <div id="clock" class="mono text-xs text-[var(--text-muted)] uppercase tracking-widest">00:00:00 PKT</div>
+        </div>
+    </footer>
+
+    <script>
+        const reviews = [
+            { title: "Hands-on quantum error correction with Google Quantum AI", time: "8 months ago", tags: ["Quantum", "Google AI"], content: "Built real quantum circuits and simulated noisy quantum environments. Focused on error correction mechanisms.", category: "tech" },
+            { title: "C Tic Tac Toe game ⭕", time: "8 months ago", tags: ["C", "Logic"], content: "Fundamentals of C and logic-based thinking. Developed an efficient win-check algorithm.", category: "tech" },
+            { title: "Java calculator app", time: "8 months ago", tags: ["Java", "GUI"], content: "Swing-based application using JFrame and JTextField for clean UI interaction.", category: "tech" },
+            { title: "Computational Science and Engineering", time: "8 months ago", tags: ["HPC", "Simulation"], content: "High-performance computing and modeling within Computational Physics.", category: "science" },
+            { title: "Javascript Basics with Operators, Loops and Functions", time: "8 months ago", tags: ["JS", "Web"], content: "Learned closures, asynchronous logic, and basic SPA architecture.", category: "tech" },
+            { title: "Modeling and Simulation with Simulink", time: "8 months ago", tags: ["Engineering", "Simulink"], content: "Organizing complex engineering projects and control system design.", category: "science" },
+            { title: "Visualizing Imperialism & the Philippines", time: "8 months ago", tags: ["History", "Visuals"], content: "Exploration of visual representations of colonial projects.", category: "humanities" },
+            { title: "Technology Evaluation for Global Development", time: "8 months ago", tags: ["Policy", "Dev"], content: "Researching the impact of technological literacy on youth engagement.", category: "business" },
+            { title: "Supply Chain Technology and Systems", time: "8 months ago", tags: ["Logistics", "Blockchain"], content: "Understanding modern automation and blockchain integration in logistics.", category: "business" },
+            { title: "Derivatives Markets: Advanced Modeling", time: "8 months ago", tags: ["Finance", "Algorithms"], content: "Modeling market behaviors such as hedging and speculation through algorithms.", category: "business" },
+            { title: "Understanding the World Through Data", time: "8 months ago", tags: ["Data", "Ethics"], content: "Using data for storytelling and making sense of global trends through ethics.", category: "science" },
+            { title: "General Chemistry II: Equilibrium & Kinetics", time: "8 months ago", tags: ["Chemistry", "Kinetics"], content: "Kinetics, equilibrium states, and transition metal properties.", category: "science" },
+            { title: "Comprehensive Final Exam in Finance", time: "8 months ago", tags: ["Finance", "Management"], content: "Capital budgeting and financial statement analysis mastery.", category: "business" },
+            { title: "IT Fundamentals: Hardware", time: "8 months ago", tags: ["IT", "Hardware"], content: "Hardware troubleshooting and computer fundamental for professionals.", category: "business" },
+            { title: "Corporate Social Responsibility (CSR)", time: "8 months ago", tags: ["CSR", "ESG"], content: "Aligning strategic business goals with social impact and ESG standards.", category: "business" },
+            { title: "The Tabernacle in Word & Image", time: "8 months ago", tags: ["Manuscripts", "Art"], content: "Renaissance art and the imagination of sacred spaces through manuscripts.", category: "humanities" },
+            { title: "Probability and Statistics I", time: "8 months ago", tags: ["Math", "ML"], content: "Optimization theory and data-driven decision-making for ML.", category: "science" },
+            { title: "Prompt Engineering for ChatGPT", time: "8 months ago", tags: ["AI", "Prompts"], content: "Mastering AI interaction for coding, research, and product development.", category: "tech" },
+            { title: "ChatGPT Voice-Powered Chatbot", time: "8 months ago", tags: ["Full Stack", "AI"], content: "Building voice-enabled agents using modern architecture stacks.", category: "tech" },
+            { title: "Hypersonics – Shock Waves to Scramjets", time: "8 months ago", tags: ["Aviation", "Physics"], content: "Airbreathing propulsion and high-speed aerospace physics.", category: "science" },
+            { title: "Simple Linear Regression", time: "8 months ago", tags: ["ML", "Stats"], content: "Supervised learning fundamentals using features and labels.", category: "science" },
+            { title: "Islamic Bioethics", time: "8 months ago", tags: ["Ethics", "Healthcare"], content: "Decision-making frameworks in modern medicine from primary sources.", category: "humanities" },
+            { title: "Economic Democracy: Cooperatives", time: "8 months ago", tags: ["Economics", "Democracy"], content: "Analyzing cooperative ownership as a solution to systemic inequality.", category: "business" },
+            { title: "Dive Into the World of Blockchain", time: "8 months ago", tags: ["Blockchain", "Web3"], content: "Decentralization, consensus models, and immutability mechanics.", category: "tech" },
+            { title: "Terrorism and Counterterrorism", time: "8 months ago", tags: ["Politics", "Security"], content: "The role of cultural narratives in defining and combating terrorism.", category: "humanities" },
+            { title: "Introduction to Quantum Mechanics", time: "8 months ago", tags: ["Quantum", "Physics"], content: "Theoretical physics and the philosophical implications of quantum theory.", category: "science" },
+            { title: "Embedded Systems: Multi-Threaded", time: "8 months ago", tags: ["Embedded", "Hardware"], content: "Multi-threaded interfacing and hardware rigor in embedded design.", category: "tech" },
+            { title: "AI Skills: Data Engineering", time: "8 months ago", tags: ["AI", "Data"], content: "Building scalable data pipelines for enterprise-level AI systems.", category: "tech" },
+            { title: "Topology in Condensed Matter", time: "8 months ago", tags: ["Topology", "Quantum"], content: "Protection of quantum states through topological phases.", category: "science" },
+            { title: "Innovation: From Plan to Product", time: "8 months ago", tags: ["Product", "Lean"], content: "Lean production and designing for market-fit efficiently.", category: "business" }
+        ];
+
+        const grid = document.getElementById('reviewsGrid');
+        const helpfulCountEl = document.getElementById('helpfulCount');
+        const typewriterEl = document.getElementById('typewriter-text');
+        const headerText = "People find my reviews helpful.";
+
+        function toggleTheme() {
+            const body = document.body;
+            const current = body.getAttribute('data-theme');
+            const target = current === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', target);
+            const icon = document.getElementById('theme-icon');
+            icon.setAttribute('data-lucide', target === 'dark' ? 'sun' : 'moon');
+            lucide.createIcons();
+        }
+
+        function animateCounter(target, duration) {
+            let start = null;
+            const step = (timestamp) => {
+                if (!start) start = timestamp;
+                const progress = Math.min((timestamp - start) / duration, 1);
+                const currentValue = Math.floor(progress * target);
+                if (currentValue >= 1000) {
+                    helpfulCountEl.textContent = (currentValue / 1000).toFixed(1) + 'k';
+                } else {
+                    helpfulCountEl.textContent = currentValue;
+                }
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                } else {
+                    helpfulCountEl.textContent = "50.3k";
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+
+        let charIdx = 0;
+        function typeWriter() {
+            if (charIdx < headerText.length) {
+                typewriterEl.innerHTML += headerText.charAt(charIdx);
+                charIdx++;
+                setTimeout(typeWriter, 80);
+            }
+        }
+
+        function render() {
+            grid.innerHTML = '';
+            reviews.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'course-card p-8 bg-[var(--card-bg)] border border-[var(--border)] rounded-[2rem] reveal active';
+                card.innerHTML = `
+                    <div class="flex justify-between items-start mb-6">
+                        <span class="mono text-[10px] font-bold uppercase tracking-widest text-[var(--text-muted)]">${item.category}</span>
+                        <span class="mono text-[10px] text-[var(--text-muted)]">${item.time}</span>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4">${item.title}</h3>
+                    <p class="text-[var(--text-muted)] text-sm leading-relaxed mb-6">${item.content}</p>
+                    <div class="flex flex-wrap gap-2">
+                        ${item.tags.map(t => `<span class="text-[10px] font-bold px-3 py-1 bg-[var(--border)] rounded-full">#${t}</span>`).join('')}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        function updateTime() {
+            const now = new Date();
+            document.getElementById('clock').innerText = `${now.toLocaleTimeString('en-GB', { hour12: false })} PKT`;
+        }
+
+        window.onload = () => {
+            lucide.createIcons();
+            setTimeout(typeWriter, 500);
+            animateCounter(50300, 1500);
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+            setInterval(updateTime, 1000);
+            updateTime();
+            render();
+        };
+    </script>
+</body>
+</html>
